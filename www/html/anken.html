@@ -1,0 +1,58 @@
+<script>
+var page = {};
+page.view = function() {
+  return [
+    m("h5", "Anken"),
+    m("div", {class: "row"}, page.vm.conds.map(function(item, i) {
+      return {} && 
+        m("div", {class: "input-field col s3"}, [
+          m("input", {id: "cond" + i, type: "text", class: "validate", onchange: m.withAttr("value", item.value), value: item.value()}),
+          m("label", {for: "cond" + i}, item.text),
+        ]);
+    })),
+    m("div", {class: "row right-align"}, [
+      m("a", {class: "btn", onclick: page.vm.conds.clear}, "Clear"),
+      m("a", {class: "btn", onclick: page.vm.conds.search}, "Search"),
+    ]),
+    m("table", [page.vm.ret().map(function(row, i) {
+      return m("tr", [ 
+        m("td", row.name),
+        m("td", row.customer),
+        m("td", row.owner),
+      ])
+    })]),
+  ];
+};
+page.vm = (function() {
+  var vm = {};
+  vm.conds = [
+    {text: "a", key: "cond1", value: m.prop("")},
+    {text: "b", key: "cond2", value: m.prop("")},
+    {text: "c", key: "cond3", value: m.prop("")},
+  ];
+  vm.conds.clear = function() {
+    vm.conds.map(function(item, i) {
+      item.value("");
+    });
+    vm.ret([]);
+  };
+  vm.conds.search = function() {
+    var data = {};
+    vm.conds.map(function(item, i) {
+      data[item.key] = item.value();
+    });
+    m.request({method: "post", url: "/anken/api/search", data: data}).then(function(ret) {
+      vm.ret(ret);
+    });
+  };
+  vm.ret = m.prop([]);
+  vm.init = function() {
+    return false;
+  };
+  return vm;
+})();
+page.controller = function() {
+  page.vm.init();
+};
+m.mount(document.getElementById("page"), {view: page.view, controller: page.controller});
+</script>

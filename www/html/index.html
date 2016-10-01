@@ -1,0 +1,22 @@
+<script>
+var page = {};
+page.view = function() {
+  return [
+    m("span", page.vm.input()),
+    m("input", {placeholder: "input here", oninput: m.withAttr("value", page.vm.input), value: page.vm.input()}),
+    m("a", {class: "btn", onclick: function() {alert("test");}}, "test"),
+  ];
+};
+page.vm = (function() {
+  var vm = {};
+  vm.input = m.prop("test");
+  vm.init = function() {
+    return false;
+  };
+  return vm;
+})();
+page.controller = function() {
+  page.vm.init();
+};
+m.mount(document.getElementById("page"), {view: page.view, controller: page.controller});
+</script>

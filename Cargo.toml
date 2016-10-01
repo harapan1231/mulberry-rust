@@ -1,0 +1,10 @@
+[package]
+name = "mulberry"
+version = "0.1.0"
+authors = ["harapan"]
+
+[dependencies]
+nickel = "*"
+toml = "*"
+rustc-serialize = "*"
+postgres = "*"
